@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://mailingo-81ti.onrender.com/'; // Change this when deploying to a different server
+const BACKEND_URL = 'https://mailingo-81ti.onrender.com'; // Change this when deploying to a different server
 
 const CONFIG = {
   backendUrl: BACKEND_URL,
