@@ -1,5 +1,5 @@
-// const BACKEND_URL = 'https://mailingo-81ti.onrender.com'; // Production
-const BACKEND_URL = 'http://localhost:3000'; // Local dev
+const BACKEND_URL = 'https://mailingo-81ti.onrender.com'; // Production
+// const BACKEND_URL = 'http://localhost:3000'; // Local dev
 
 const CONFIG = {
   backendUrl: BACKEND_URL,
