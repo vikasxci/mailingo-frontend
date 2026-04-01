@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mailingo — Resume Mailer</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Background blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">✉</span>
+        <span class="logo-text">Mailingo</span>
+      </div>
+      <p class="tagline">Send your resume with a single click</p>
+    </header>
+
+    <!-- Send Card -->
+    <div class="card send-card">
+      <h2 class="card-title">Send Resume</h2>
+      <p class="card-desc">Enter the recruiter's email and your resume will be delivered with a beautifully designed cover message.</p>
+      <form id="mailForm" class="mail-form">
+        <div class="input-group">
+          <input
+            type="email"
+            id="emailInput"
+            placeholder="recruiter@company.com"
+            autocomplete="email"
+            required
+          />
+          <button type="submit" id="sendBtn">
+            <span class="btn-text">Send</span>
+            <span class="btn-loader hidden">
+              <span class="spinner"></span>
+            </span>
+          </button>
+        </div>
+      </form>
+      <div id="toast" class="toast hidden"></div>
+    </div>
+
+    <!-- History Card -->
+    <div class="card history-card">
+      <div class="history-header">
+        <h2 class="card-title">Sent History</h2>
+        <button id="refreshBtn" class="refresh-btn" title="Refresh">↻</button>
+      </div>
+      <div id="historyList" class="history-list">
+        <p class="empty-state">No mails sent yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
