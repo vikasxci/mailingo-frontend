@@ -2,234 +2,267 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mailingo — Resume Mailer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mailingo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* ===== Reset & Base ===== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0b0f1a;
-      color: #e2e8f0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
+    :root {
+      --bg: #0b0f1a; --primary: #0ea5e9; --secondary: #8b5cf6;
+      --card-bg: rgba(255,255,255,0.04); --card-border: rgba(255,255,255,0.08);
+      --input-bg: rgba(255,255,255,0.06); --input-border: rgba(255,255,255,0.12);
+      --text: #f1f5f9; --text-muted: #94a3b8; --text-dim: #64748b;
+      --success: #34d399; --error: #f87171;
     }
-
-    /* ===== Animated Background Blobs ===== */
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.35;
-      z-index: 0;
-      pointer-events: none;
-    }
-    .blob-1 { width: 500px; height: 500px; background: #0ea5e9; top: -120px; left: -100px; animation: float1 18s ease-in-out infinite; }
-    .blob-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: -80px; right: -80px; animation: float2 22s ease-in-out infinite; }
-    .blob-3 { width: 300px; height: 300px; background: #06b6d4; top: 50%; left: 60%; animation: float3 20s ease-in-out infinite; }
-
-    @keyframes float1 { 0%, 100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,80px) scale(1.1); } }
-    @keyframes float2 { 0%, 100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-50px,-60px) scale(1.15); } }
-    @keyframes float3 { 0%, 100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-40px,50px) scale(0.9); } }
-
-    /* ===== Container ===== */
-    .container { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 60px 20px 80px; }
-
-    /* ===== Header ===== */
-    .header { text-align: center; margin-bottom: 40px; }
-    .logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; }
-    .logo-icon { font-size: 36px; }
-    .logo-text {
-      font-size: 36px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .tagline { font-size: 15px; color: #64748b; font-weight: 400; }
-
-    /* ===== Cards ===== */
-    .card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 32px;
-      margin-bottom: 24px;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-    }
-    .card-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #f1f5f9; }
-    .card-desc { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 24px; }
-
-    /* ===== Form ===== */
-    .input-group { display: flex; gap: 10px; }
-    #emailInput {
-      flex: 1;
-      padding: 14px 18px;
-      font-size: 15px;
-      font-family: inherit;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.06);
-      color: #f1f5f9;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    #emailInput::placeholder { color: #64748b; }
-    #emailInput:focus { border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.15); }
-
-    #sendBtn {
-      padding: 14px 28px;
-      font-size: 15px;
-      font-weight: 600;
-      font-family: inherit;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
-      white-space: nowrap;
-      min-width: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #sendBtn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,233,0.35); }
-    #sendBtn:active { transform: translateY(0); }
-    #sendBtn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
-
-    /* ===== Spinner ===== */
-    .spinner {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
+    html, body { height: 100%; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    .blob { position: fixed; border-radius: 50%; filter: blur(120px); opacity: .3; z-index: 0; pointer-events: none; }
+    .blob-1 { width: 500px; height: 500px; background: #0ea5e9; top: -120px; left: -100px; animation: fl1 18s ease-in-out infinite; }
+    .blob-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: -80px; right: -80px; animation: fl2 22s ease-in-out infinite; }
+    .blob-3 { width: 280px; height: 280px; background: #06b6d4; top: 45%; left: 60%; animation: fl3 20s ease-in-out infinite; }
+    @keyframes fl1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,80px) scale(1.1)} }
+    @keyframes fl2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-50px,-60px) scale(1.15)} }
+    @keyframes fl3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-40px,50px) scale(0.9)} }
+    .page { display: none; position: relative; z-index: 1; min-height: 100vh; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+    .page.active { display: block; }
+    .page-wrap { max-width: 560px; margin: 0 auto; padding: 50px 16px 20px; }
+    .page-title { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+    .page-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 24px; margin-bottom: 16px; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .logo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .logo-text { font-size: 32px; font-weight: 800; background: linear-gradient(135deg,#0ea5e9,#8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-tagline { color: var(--text-dim); font-size: 14px; margin-bottom: 28px; }
+    .card-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+    .form-input, .form-textarea { width: 100%; padding: 13px 16px; font-size: 14px; font-family: inherit; border: 1px solid var(--input-border); border-radius: 12px; background: var(--input-bg); color: var(--text); outline: none; transition: border-color .2s, box-shadow .2s; resize: vertical; }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+    .form-input:focus, .form-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(14,165,233,.15); }
+    .form-textarea { min-height: 80px; line-height: 1.6; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 7px; margin-top: 14px; }
+    .form-label:first-child { margin-top: 0; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:480px) { .form-row-2 { grid-template-columns: 1fr; } }
+    .section-chip { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); background: rgba(14,165,233,.1); border: 1px solid rgba(14,165,233,.2); border-radius: 20px; padding: 4px 12px; margin-bottom: 16px; }
+    .send-row { display: flex; gap: 10px; }
+    @media(max-width:420px) { .send-row { flex-direction: column; } }
+    .btn-primary { padding: 13px 26px; font-size: 14px; font-weight: 600; font-family: inherit; border: none; border-radius: 12px; background: linear-gradient(135deg,#0ea5e9,#8b5cf6); color: #fff; cursor: pointer; transition: transform .15s, box-shadow .2s, opacity .2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,233,.35); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-primary.full { width: 100%; }
+    .btn-ghost { padding: 9px 16px; font-size: 13px; font-weight: 600; font-family: inherit; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card-bg); color: var(--text-muted); cursor: pointer; transition: background .2s, color .2s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+    .btn-ghost:hover { background: rgba(255,255,255,.08); color: var(--text); }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .hidden { display: none !important; }
-
-    /* ===== Toast ===== */
-    .toast { margin-top: 16px; padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: 500; text-align: center; animation: slideUp 0.3s ease; }
-    .toast.success { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
-    .toast.error { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* ===== History ===== */
-    .history-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .history-header .card-title { margin-bottom: 0; }
-    .refresh-btn {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      color: #94a3b8;
-      font-size: 18px;
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, transform 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .refresh-btn:hover { background: rgba(14,165,233,0.12); color: #0ea5e9; transform: rotate(180deg); }
-
-    .history-list { max-height: 360px; overflow-y: auto; }
-    .history-list::-webkit-scrollbar { width: 5px; }
-    .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-
-    .empty-state { text-align: center; color: #475569; font-size: 14px; padding: 24px 0; }
-
-    .history-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      margin-bottom: 8px;
-      transition: background 0.2s;
-    }
-    .history-item:hover { background: rgba(255,255,255,0.06); }
-    .history-item .email { font-size: 14px; font-weight: 500; color: #e2e8f0; word-break: break-all; }
-    .history-item .meta { display: flex; align-items: center; gap: 12px; flex-shrink: 0; margin-left: 16px; }
-    .history-item .time { font-size: 12px; color: #64748b; white-space: nowrap; }
-
-    .status-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .status-badge.sent { background: rgba(16,185,129,0.12); color: #34d399; }
-    .status-badge.failed { background: rgba(239,68,68,0.12); color: #f87171; }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 480px) {
-      .container { padding: 40px 16px 60px; }
-      .card { padding: 24px 20px; }
-      .input-group { flex-direction: column; }
-      #sendBtn { width: 100%; }
-      .logo-text { font-size: 28px; }
-      .logo-icon { font-size: 28px; }
-    }
+    .toast { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; text-align: center; animation: slideUp .3s ease; }
+    .toast.success { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3); color: var(--success); }
+    .toast.error { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); color: var(--error); }
+    @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .history-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .history-toolbar .card-title { margin-bottom: 0; }
+    .refresh-btn { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s, transform .3s; flex-shrink: 0; }
+    .refresh-btn:hover { background: rgba(14,165,233,.1); color: var(--primary); transform: rotate(180deg); }
+    .history-item { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; gap: 12px; border-radius: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.05); margin-bottom: 8px; transition: background .2s; }
+    .history-item:hover { background: rgba(255,255,255,.06); }
+    .history-email { font-size: 14px; font-weight: 500; color: var(--text); word-break: break-all; flex: 1; }
+    .history-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .history-time { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+    .badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: .5px; }
+    .badge.sent { background: rgba(16,185,129,.12); color: var(--success); }
+    .badge.failed { background: rgba(239,68,68,.12); color: var(--error); }
+    .empty-state { text-align: center; color: var(--text-dim); font-size: 14px; padding: 32px 0; }
+    .resume-info { display: flex; align-items: center; gap: 14px; }
+    .resume-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(14,165,233,.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary); }
+    .resume-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; word-break: break-all; }
+    .resume-date { font-size: 12px; color: var(--text-dim); }
+    .resume-actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .upload-zone { border: 2px dashed var(--input-border); border-radius: 16px; padding: 36px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+    .upload-zone:hover, .upload-zone.drag { border-color: var(--primary); background: rgba(14,165,233,.05); }
+    .upload-zone-icon { font-size: 36px; margin-bottom: 10px; }
+    .upload-zone-text { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
+    .upload-zone-hint { font-size: 12px; color: var(--text-dim); }
+    #resumeFileInput { display: none; }
+    .upload-progress { margin-top: 14px; }
+    .progress-bar { height: 6px; background: var(--input-bg); border-radius: 10px; overflow: hidden; margin-top: 6px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg,#0ea5e9,#8b5cf6); border-radius: 10px; transition: width .3s; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: rgba(11,15,26,.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1px solid rgba(255,255,255,.07); display: flex; padding-bottom: env(safe-area-inset-bottom); }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 4px 12px; border: none; background: none; cursor: pointer; color: var(--text-dim); transition: color .2s; gap: 4px; position: relative; }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 32px; height: 2px; background: var(--primary); border-radius: 0 0 4px 4px; }
+    .nav-label { font-size: 10px; font-weight: 600; letter-spacing: .3px; }
+    .nav-item svg { transition: transform .2s; }
+    .nav-item.active svg { transform: scale(1.1); }
   </style>
 </head>
 <body>
-  <!-- Background blobs -->
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
-      <div class="logo">
-        <span class="logo-icon">✉</span>
+  <!-- HOME -->
+  <div id="page-home" class="page active">
+    <div class="page-wrap">
+      <div class="logo-row">
+        <span style="font-size:32px;">&#x2709;&#xFE0F;</span>
         <span class="logo-text">Mailingo</span>
       </div>
-      <p class="tagline">Send your resume with a single click</p>
-    </header>
-
-    <!-- Send Card -->
-    <div class="card send-card">
-      <h2 class="card-title">Send Resume</h2>
-      <p class="card-desc">Enter the recruiter's email and your resume will be delivered with a beautifully designed cover message.</p>
-      <form id="mailForm" class="mail-form">
-        <div class="input-group">
-          <input
-            type="email"
-            id="emailInput"
-            placeholder="recruiter@company.com"
-            autocomplete="email"
-            required
-          />
-          <button type="submit" id="sendBtn">
-            <span class="btn-text">Send</span>
-            <span class="btn-loader hidden">
-              <span class="spinner"></span>
-            </span>
-          </button>
-        </div>
-      </form>
-      <div id="toast" class="toast hidden"></div>
-    </div>
-
-    <!-- History Card -->
-    <div class="card history-card">
-      <div class="history-header">
-        <h2 class="card-title">Sent History</h2>
-        <button id="refreshBtn" class="refresh-btn" title="Refresh">↻</button>
+      <p class="logo-tagline">Send your resume with one click</p>
+      <div class="card">
+        <h2 class="card-title">Send Resume</h2>
+        <p class="card-desc">Enter the recruiter&apos;s email &mdash; a beautiful application mail with your resume attached will be delivered instantly.</p>
+        <form id="mailForm">
+          <div class="send-row">
+            <input id="emailInput" class="form-input" type="email" placeholder="recruiter@company.com" autocomplete="email" required />
+            <button id="sendBtn" class="btn-primary" type="submit">
+              <span class="btn-text">Send</span>
+              <span class="btn-loader hidden"><span class="spinner"></span></span>
+            </button>
+          </div>
+        </form>
+        <div id="toast" class="toast hidden"></div>
       </div>
-      <div id="historyList" class="history-list">
-        <p class="empty-state">No mails sent yet.</p>
+      <div class="card">
+        <h2 class="card-title" style="font-size:14px;color:var(--text-muted);font-weight:600;">What gets sent</h2>
+        <p style="font-size:13px;color:var(--text-dim);margin-top:8px;line-height:1.7;">
+          &#x1F3A8;&nbsp; Designed HTML email with your profile, skills &amp; highlights<br>
+          &#x1F4CE;&nbsp; Resume PDF attached (upload via Resume tab)<br>
+          &#x1F4BE;&nbsp; Every send is logged in history
+        </p>
       </div>
     </div>
   </div>
+
+  <!-- HISTORY -->
+  <div id="page-history" class="page">
+    <div class="page-wrap">
+      <h1 class="page-title">History</h1>
+      <p class="page-subtitle">All resume mails you&apos;ve sent</p>
+      <div class="card">
+        <div class="history-toolbar">
+          <span class="card-title">Sent Mails</span>
+          <button id="refreshBtn" class="refresh-btn" title="Refresh">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+        </div>
+        <div id="historyList"><p class="empty-state">Loading...</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUME -->
+  <div id="page-resume" class="page">
+    <div class="page-wrap">
+      <h1 class="page-title">Resume</h1>
+      <p class="page-subtitle">Upload your latest resume to attach to mails</p>
+      <div class="card">
+        <h2 class="card-title">Current Resume</h2>
+        <div id="currentResumeInfo"><p class="empty-state" style="padding:16px 0;">No resume uploaded yet.</p></div>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Upload New Resume</h2>
+        <p class="card-desc">PDF only &middot; Max 10 MB &middot; Stored on Cloudinary</p>
+        <div id="uploadZone" class="upload-zone">
+          <div class="upload-zone-icon">&#x1F4C4;</div>
+          <p class="upload-zone-text">Drag &amp; drop PDF here</p>
+          <p class="upload-zone-hint">or click to browse files</p>
+        </div>
+        <input id="resumeFileInput" type="file" accept="application/pdf" />
+        <div id="uploadProgress" class="upload-progress hidden">
+          <p id="uploadProgressText" style="font-size:13px;color:var(--text-muted);">Uploading...</p>
+          <div class="progress-bar"><div id="uploadProgressFill" class="progress-fill" style="width:0%"></div></div>
+        </div>
+        <div id="resumeToast" class="toast hidden" style="margin-top:14px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="page-content" class="page">
+    <div class="page-wrap">
+      <h1 class="page-title">Mail Content</h1>
+      <p class="page-subtitle">Edit your email template &mdash; design stays the same</p>
+      <div class="card">
+        <div class="section-chip">Subject</div>
+        <label class="form-label" for="c-subject">Email Subject Line</label>
+        <input id="c-subject" class="form-input" type="text" placeholder="Subject..." />
+      </div>
+      <div class="card">
+        <div class="section-chip">Header</div>
+        <div class="form-row-2">
+          <div><label class="form-label" for="c-h-name">Name</label><input id="c-h-name" class="form-input" type="text" placeholder="Your Name" /></div>
+          <div><label class="form-label" for="c-h-role">Role / Title</label><input id="c-h-role" class="form-input" type="text" placeholder="Software Engineer..." /></div>
+        </div>
+        <div class="form-row-2">
+          <div><label class="form-label" for="c-h-email">Email</label><input id="c-h-email" class="form-input" type="email" placeholder="you@email.com" /></div>
+          <div><label class="form-label" for="c-h-phone">Phone</label><input id="c-h-phone" class="form-input" type="text" placeholder="+91..." /></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-chip">Body</div>
+        <label class="form-label" for="c-b-greeting">Greeting</label>
+        <input id="c-b-greeting" class="form-input" type="text" placeholder="Dear Hiring Manager," />
+        <label class="form-label" for="c-b-intro">Introduction Paragraph</label>
+        <textarea id="c-b-intro" class="form-textarea" rows="3" placeholder="I'm ... a Software Engineer..."></textarea>
+        <label class="form-label" for="c-b-current">Current Role Paragraph</label>
+        <textarea id="c-b-current" class="form-textarea" rows="3" placeholder="I currently work at..."></textarea>
+      </div>
+      <div class="card">
+        <div class="section-chip">Skills</div>
+        <label class="form-label" for="c-s-primary">Primary Skills <span style="font-weight:400;text-transform:none;letter-spacing:0;">(one per line)</span></label>
+        <textarea id="c-s-primary" class="form-textarea" rows="4" placeholder="TypeScript&#10;Node.js&#10;NestJS"></textarea>
+        <label class="form-label" for="c-s-secondary">Secondary Skills <span style="font-weight:400;text-transform:none;letter-spacing:0;">(one per line)</span></label>
+        <textarea id="c-s-secondary" class="form-textarea" rows="4" placeholder="MongoDB&#10;Redis&#10;NATS"></textarea>
+      </div>
+      <div class="card">
+        <div class="section-chip">Highlights</div>
+        <label class="form-label" for="c-highlights">Key Highlights <span style="font-weight:400;text-transform:none;letter-spacing:0;">(one per line)</span></label>
+        <textarea id="c-highlights" class="form-textarea" rows="4" placeholder="Built TransactionManager...&#10;Reduced onboarding by 60%..."></textarea>
+      </div>
+      <div class="card">
+        <div class="section-chip">CTA</div>
+        <label class="form-label" for="c-cta">Call-to-Action Text</label>
+        <textarea id="c-cta" class="form-textarea" rows="2" placeholder="My resume is attached..."></textarea>
+      </div>
+      <div class="card">
+        <div class="section-chip">Footer</div>
+        <div class="form-row-2">
+          <div><label class="form-label" for="c-f-name">Name</label><input id="c-f-name" class="form-input" type="text" placeholder="Your Name" /></div>
+          <div><label class="form-label" for="c-f-role">Role / College</label><input id="c-f-role" class="form-input" type="text" placeholder="SWE | NIT..." /></div>
+        </div>
+        <div class="form-row-2">
+          <div><label class="form-label" for="c-f-email">Email</label><input id="c-f-email" class="form-input" type="email" placeholder="you@email.com" /></div>
+          <div><label class="form-label" for="c-f-phone">Phone</label><input id="c-f-phone" class="form-input" type="text" placeholder="+91..." /></div>
+        </div>
+      </div>
+      <button id="saveContentBtn" class="btn-primary full" style="margin-bottom:8px;">
+        <span class="btn-text">Save Changes</span>
+        <span class="btn-loader hidden"><span class="spinner"></span></span>
+      </button>
+      <div id="contentToast" class="toast hidden"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-page="history">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="nav-label">History</span>
+    </button>
+    <button class="nav-item" data-page="resume">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="nav-label">Resume</span>
+    </button>
+    <button class="nav-item" data-page="content">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <span class="nav-label">Content</span>
+    </button>
+  </nav>
 
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
